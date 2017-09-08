@@ -8,7 +8,9 @@ Python dependencies are handled through Miniconda3 which can be found here
 
 To set up the environment install Minicoinda3 and run the following command in the Anaconda terminal:
 
- `conda env create --file wally-env.txt`
+ `conda create --name  wheres-wally --file wally-env.txt`
+
+### Running the scripts
 
 Follow these steps to generate the sub-images with labels (all commands in Anaconda Terminal).
 
