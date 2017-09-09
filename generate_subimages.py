@@ -16,7 +16,7 @@ def find_box(label):
     """
     Finds the bounding box given input label.
     """
-    shp = label.shape
+    shape = label.shape
     yStart = np.argmax(label.sum(axis=0))
     yEnd = int(yStart+np.max(np.unique(label.sum(axis=1))))
     xStart = np.argmax(label.sum(axis=1))
@@ -26,13 +26,29 @@ def find_box(label):
 
 if __name__=="__main__":
     side_length = 224
-    imgs = np.load('imgs.npy')
+    images = np.load('images.npy')
     labels = np.load('labels.npy')
-    waldo_sub_imgs = []
-    waldo_sub_labels = []
+    wally_sub_images = []
+    wally_sub_labels = []
     for i, label in enumerate(labels):
         box = find_box(label)
-        waldo_sub_imgs.append(extract_sub_image(imgs[i], box, side_length))
-        waldo_sub_labels.append(extract_sub_image(label, box, side_length))
-    np.save('wally_sub_imgs.npy',np.array(waldo_sub_imgs))
-    np.save('wally_sub_labels.npy',np.array(waldo_sub_labels))
+        wally_sub_images.append(extract_sub_image(images[i], box, side_length))
+        wally_sub_labels.append(extract_sub_image(label, box, side_length))
+    np.save('wally_sub_imgs.npy',np.array(wally_sub_images))
+    np.save('wally_sub_labels.npy',np.array(wally_sub_labels))
+
+
+    """
+    plt.imshow(wally_sub_images[0] * std + mu)
+    plt.show()
+    plt.imshow(wally_sub_labels[0])
+    plt.show()
+    plt.imshow(wally_sub_images[1] * std + mu)
+    plt.show()
+    plt.imshow(wally_sub_labels[1])
+    plt.show()
+    plt.imshow(wally_sub_images[2] * std + mu)
+    plt.show()
+    plt.imshow(wally_sub_labels[2])
+    plt.show()
+    """
