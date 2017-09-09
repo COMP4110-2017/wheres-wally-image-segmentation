@@ -4,7 +4,7 @@ from numpy import random
 
 from keras.utils import to_categorical
 
-class BatchIndicies(object):
+class BatchIndices(object):
     """
     Generates batches of shuffled indices.
     # Arguments
