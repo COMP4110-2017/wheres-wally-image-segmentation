@@ -41,10 +41,12 @@ if __name__=="__main__":
     np.save('images.npy', images)
     np.save('labels.npy', labels)
 
-    """
     images = np.load('images.npy')
     labels = np.load('labels.npy')
 
+    '''
     plt.imshow(images[-2] * std + mu)
     plt.show()
-    """
+    plt.imshow(labels[-2] * std + mu)
+    plt.show()
+    '''

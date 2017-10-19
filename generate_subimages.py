@@ -37,6 +37,7 @@ if __name__=="__main__":
     np.save('wally_sub_images.npy',np.array(wally_sub_images))
     np.save('wally_sub_labels.npy',np.array(wally_sub_labels))
 
+    '''
     plt.imshow(wally_sub_images[0] * std + mu)
     plt.show()
     plt.imshow(wally_sub_labels[0])
@@ -49,4 +50,5 @@ if __name__=="__main__":
     plt.show()
     plt.imshow(wally_sub_labels[2])
     plt.show()
+    '''
 
