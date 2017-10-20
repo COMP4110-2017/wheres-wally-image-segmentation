@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 def extract_sub_image(img, box, side_length):
     xStart, xEnd, yStart, yEnd = box
-    i = img[xEnd-224:xStart+side_length, yEnd-side_length:yStart+side_length]
+    i = img[xEnd-160:xStart+side_length, yEnd-side_length:yStart+side_length]
     if i.shape[0]==0:
         return img[xStart:xStart+(side_length+1), yEnd-side_length:yStart+side_length]
     else:
@@ -25,7 +25,7 @@ def find_box(label):
 
 
 if __name__=="__main__":
-    side_length = 224
+    side_length = 160
     images = np.load('images.npy')
     labels = np.load('labels.npy')
     wally_sub_images = []

@@ -42,7 +42,7 @@ class segm_generator(object):
         train: If true, will shuffle/randomize sub-images
         waldo: If true, allow sub-images to contain targets.
     """
-    def __init__(self, x, y, bs=64, out_sz=(224,224), train=True, waldo=True):
+    def __init__(self, x, y, bs=64, out_sz=(160,160), train=True, waldo=True):
         self.x, self.y, self.bs, self.train = x,y,bs,train
         self.waldo = waldo
         self.n = x.shape[0]
@@ -82,7 +82,7 @@ class segm_generator(object):
         xs,ys = zip(*tuple(items))
         return np.stack(xs), np.stack(ys)
 
-def seg_gen(x, y, bs=64, out_sz=(224,224), train=True, waldo=True):
+def seg_gen(x, y, bs=64, out_sz=(160,160), train=True, waldo=True):
     """
     Generator wrapper on iterators for python 2 compatibility.
     """
@@ -90,7 +90,7 @@ def seg_gen(x, y, bs=64, out_sz=(224,224), train=True, waldo=True):
     while True:
         yield sg.__next__()
 
-def seg_gen_mix(x1, y1, x2, y2, tot_bs=4, prop=0.75, out_sz=(224,224), train=True):
+def seg_gen_mix(x1, y1, x2, y2, tot_bs=4, prop=0.75, out_sz=(160,160), train=True):
     """
     Mixes generator output. The second generator is set to skip images that contain any positive targets.
     # Arguments
