@@ -46,18 +46,19 @@ if __name__ == "__main__":
     img_input = Input(shape=input_shape)
     x = create_tiramisu(2, img_input, nb_layers_per_block=[4, 5, 7, 10, 12, 15], p=0.2, wd=1e-4)
     model = Model(img_input, x)
-    model.compile(loss='categorical_crossentropy', optimizer=keras.optimizers.RMSprop(1e-3), metrics=["accuracy"],
-                  sample_weight_mode='temporal')
-    a = datetime.datetime.now()
-    ep = 1
-    model.fit_generator(gen_mix, steps_per_epoch=5, epochs=ep, verbose=0, callbacks=[TQDMCallback()],
-                        class_weight=sample_weights)
-    b = datetime.datetime.now()
-    print('Training Complete! Time: ', b - a)
 
-    # Save model
-    modelName = 'model_' + str(ep) + 'epochs.h5'
-    model.save(modelName)
+    # model.compile(loss='categorical_crossentropy', optimizer=keras.optimizers.RMSprop(1e-3), metrics=["accuracy"],
+    #               sample_weight_mode='temporal')
+    # a = datetime.datetime.now()
+    # ep = 1
+    # model.fit_generator(gen_mix, steps_per_epoch=5, epochs=ep, verbose=0, callbacks=[TQDMCallback()],
+    #                     class_weight=sample_weights)
+    # b = datetime.datetime.now()
+    # print('Training Complete! Time: ', b - a)
+    #
+    # # Save model
+    # modelName = 'model_' + str(ep) + 'epochs.h5'
+    # model.save(modelName)
 
     # Display error history
 
@@ -76,19 +77,17 @@ if __name__ == "__main__":
 
     gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels, tot_bs=6, prop=.67)
 
-    ep = 1
-    model.fit_generator(gen_mix, steps_per_epoch=3, epochs=ep, verbose=0, callbacks=[TQDMCallback()],
-                        class_weight=sample_weights)
+    # ep = 1
+    # model.fit_generator(gen_mix, steps_per_epoch=3, epochs=ep, verbose=0, callbacks=[TQDMCallback()],
+    #                     class_weight=sample_weights)
+    #
+    # # Save model
+    # modelName = 'model_' + str(ep) + 'epochs.h5'
+    # model.save(modelName)
 
-    # Save model
-    modelName = 'model_' + str(ep) + 'epochs.h5'
-    model.save(modelName)
 
-    # Display error history
-
-    # h = model.history.history
-    # plt.plot(h['loss'])
-    # plt.show()
+    '''
+    # OVERNIGHT TRAINING
 
     model.fit_generator(gen_mix, steps_per_epoch=6, epochs=1, verbose=0, callbacks=[TQDMCallback()],
                         class_weight=sample_weights)
@@ -113,3 +112,52 @@ if __name__ == "__main__":
     model.save('overnight_backup1.h5')
     model.save('overnight_backup2.h5')
     model.save('overnight_backup3.h5')
+    '''
+    model.load_weights('model_5000epochs.h5')
+
+    '''
+
+    # MORE TRAINING
+
+    model.fit_generator(gen_mix, steps_per_epoch=6, epochs=2000, verbose=0, callbacks=[TQDMCallback()],
+                        class_weight=sample_weights)
+    h3 = model.history.history
+    plt.plot(h3['loss'])
+    plt.show()
+    '''
+
+
+    '''
+
+    # PREDICTION ON TRAINING
+
+    gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels, tot_bs=6, prop=.67, train=False)
+    X, y = next(gen_mix)
+    preds = model.predict(X)
+    plt.imshow(X[1] * std + mu)
+    plt.show()
+    plt.imshow(preds[1].reshape(224, 224, 2)[:, :, 1])
+    plt.show()
+    '''
+
+
+
+    '''
+
+    # MORE TRAINING: ALTERED WALDO:NO-WALDO WEIGHTS
+        gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels, tot_bs=6, prop=.34)
+    model.fit_generator(gen_mix, steps_per_epoch=6, epochs=2000, verbose=0, callbacks=[tqdm],
+                        class_weight=sample_weights)
+
+    '''
+
+
+    '''
+    # PREDICT ON WHOLE IMAGE
+        im = Image.open('imgs/new_imgs/giant_waldo.jpg')
+    im.resize((im.size[0] // 2, im.size[1] // 2))
+    new_imgs = np.stack([load_image(img_file, img_sz=img_sz) for img_file in ['imgs/new_imgs/giant_waldo.jpg']])
+    from scipy.misc import imresize
+    '''
+
+
