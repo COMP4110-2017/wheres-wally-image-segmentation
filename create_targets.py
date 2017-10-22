@@ -45,6 +45,19 @@ def make_target(img_file, boxes):
     return target
 
 # iterate through the files to create and save target images
+def run():
+    img_files = glob.glob(IMAGE_PATH + "*.jpg")
+    if not os.path.exists(TARGET_PATH):
+        os.mkdir(TARGET_PATH)
+    for img in img_files:
+        xml_file = grab_xml_file(img)
+        i = get_image_number(xml_file)
+        with open(xml_file, mode='r') as f:
+            raw_xml = f.read()
+        boxes = decode_bounding_box(raw_xml)
+        target = make_target(img, boxes)
+        scipy.misc.imsave(TARGET_PATH + i + '.png', target)
+
 if __name__ == "__main__":
     img_files = glob.glob(IMAGE_PATH+"*.jpg")
     if not os.path.exists(TARGET_PATH):
