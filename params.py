@@ -8,5 +8,5 @@ NEW_PATH = "images/new_images/"
 EPOCHS = 1
 STEPS_PER_EPOCH = 6
 LOAD_MODEL = ""
-SAVE_MODEL = "save_model_name.h3"
+SAVE_MODEL = "save_model_name"
 SPLIT = 0
