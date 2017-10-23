@@ -1,28 +1,38 @@
-# Where's Wally Image Segmentation
+# Where's Wally
 
-This repository handles the segmentation of the full size puzzles into smaller sub-images.
+## Python Packages
 
-### Python packages
+Python dependencies are handled through Anaconda. To set up the environment install Anaconda and run the following command in the Anaconda terminal:
 
-Python dependencies are handled through Miniconda3 which can be found here
+    conda create --name  wheres-wally --file wally-env.txt
 
-To set up the environment install Minicoinda3 and run the following command in the Anaconda terminal:
+## Configuration
 
- `conda create --name  wheres-wally --file wally-env.txt`
+To setup the system, copy the ```env.py.example``` file to ```env.py``` in the root folder.
 
-### Running the scripts
+    cp env.py.example env.py
 
-Follow these steps to generate the sub-images with labels (all commands in Anaconda Terminal).
+You can then adjust the parameters to your liking.
 
-+ Unzip images.zip.
-+ Import any required dependencies (listed below).
-+ Run this command to create the targets from the bounding box xml files.
+    # Training parameters
+    EPOCHS = 2000
+    STEPS_PER_EPOCH = 6
+    SPLIT = 0.67
+    CHARACTER = "wanda"
 
-`python create_targets.py`
-+ Run this command to apply required preprocessing to the images. This will create the wally/not wally labels.
+    # Predicting model (just the filename)
+    MODEL_NAME = "wanda_2000_6_0.67"
 
-`python preprocessing.py`
-+ Run this command to create npy files that contain the broken down wally/not wally images
+## Building The Model
 
-`python generate_subimages.py`
+Run this command in Anaconda Terminal to build the model, using the configuration parameters in the ```env.py``` file.
 
+    python run_everything.py
+
+## Predicting On The Built Model
+
+Run this command in Anaconda Terminal to start predicting on the built model with the name as specified in the ```env.py``` file.
+
+    python run_everything.py
+
+Images with prediction masks will be stored in the ```output``` folder.
