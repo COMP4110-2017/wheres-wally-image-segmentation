@@ -1,7 +1,6 @@
 # imports
 import numpy as np
 from PIL import Image
-import matplotlib.pyplot as plt
 import os
 import glob
 from params import *
@@ -76,10 +75,3 @@ if __name__ == "__main__":
 
     images = np.load(NUMPY_PATH + 'images.npy')
     labels = np.load(NUMPY_PATH + 'labels.npy')
-
-    '''
-    plt.imshow(images[-2] * std + mu)
-    plt.show()
-    plt.imshow(labels[-2] * std + mu)
-    plt.show()
-    '''
