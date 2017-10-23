@@ -25,29 +25,29 @@ def find_box(label):
 
 def run():
     side_length = 160
-    images = np.load('images.npy')
-    labels = np.load('labels.npy')
+    images = np.load(NUMPY_PATH + 'images.npy')
+    labels = np.load(NUMPY_PATH + 'labels.npy')
     wally_sub_images = []
     wally_sub_labels = []
     for i, label in enumerate(labels):
         box = find_box(label)
         wally_sub_images.append(extract_sub_image(images[i], box, side_length))
         wally_sub_labels.append(extract_sub_image(label, box, side_length))
-    np.save('wally_sub_images.npy', np.array(wally_sub_images))
-    np.save('wally_sub_labels.npy', np.array(wally_sub_labels))
+    np.save(NUMPY_PATH + 'wally_sub_images.npy', np.array(wally_sub_images))
+    np.save(NUMPY_PATH + 'wally_sub_labels.npy', np.array(wally_sub_labels))
 
 if __name__=="__main__":
     side_length = 160
-    images = np.load('images.npy')
-    labels = np.load('labels.npy')
+    images = np.load(NUMPY_PATH + 'images.npy')
+    labels = np.load(NUMPY_PATH + 'labels.npy')
     wally_sub_images = []
     wally_sub_labels = []
     for i, label in enumerate(labels):
         box = find_box(label)
         wally_sub_images.append(extract_sub_image(images[i], box, side_length))
         wally_sub_labels.append(extract_sub_image(label, box, side_length))
-    np.save('wally_sub_images.npy',np.array(wally_sub_images))
-    np.save('wally_sub_labels.npy',np.array(wally_sub_labels))
+    np.save(NUMPY_PATH + 'wally_sub_images.npy',np.array(wally_sub_images))
+    np.save(NUMPY_PATH + 'wally_sub_labels.npy',np.array(wally_sub_labels))
 
     '''
     plt.imshow(wally_sub_images[0] * std + mu)

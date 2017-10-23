@@ -16,10 +16,10 @@ sess = tf.Session(config=config)
 
 def run():
     # Load Data
-    images = np.load('images.npy')
-    labels = np.load('labels.npy')
-    waldo_sub_imgs = np.load('wally_sub_images.npy')
-    waldo_sub_labels = np.load('wally_sub_labels.npy')
+    images = np.load(NUMPY_PATH + 'images.npy')
+    labels = np.load(NUMPY_PATH + 'labels.npy')
+    waldo_sub_imgs = np.load(NUMPY_PATH + 'wally_sub_images.npy')
+    waldo_sub_labels = np.load(NUMPY_PATH + 'wally_sub_labels.npy')
     gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels)
     X, y = next(gen_mix)
     freq0 = float(np.sum(labels == 0))
@@ -38,16 +38,17 @@ def run():
                   sample_weight_mode='temporal')
 
     # Load Model Weights
-    if (params.LOAD_MODEL !=""):
-        model.load_weights(params.LOAD_MODEL)
+    if (params.LOAD_MODEL != ""):
+        model.load_weights(MODEL_PATH + LOAD_MODEL)
 
     # Training
-    if(params.SPLIT == 0):
+    if (params.SPLIT == 0):
         gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels)
     else:
         gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels, tot_bs=6, prop=params.SPLIT)
     a = datetime.datetime.now()
-    model.fit_generator(gen_mix, steps_per_epoch=params.STEPS_PER_EPOCH, epochs=params.EPOCHS, verbose=0, callbacks=[TQDMCallback()],
+    model.fit_generator(gen_mix, steps_per_epoch=params.STEPS_PER_EPOCH, epochs=params.EPOCHS, verbose=0,
+                        callbacks=[TQDMCallback()],
                         class_weight=sample_weights)
     b = datetime.datetime.now()
     print('Training Complete! Time: ', b - a)
@@ -62,10 +63,10 @@ def run():
 
 
 if __name__ == "__main__":
-    images = np.load('images.npy')
-    labels = np.load('labels.npy')
-    waldo_sub_imgs = np.load('wally_sub_images.npy')
-    waldo_sub_labels = np.load('wally_sub_labels.npy')
+    images = np.load(NUMPY_PATH + 'images.npy')
+    labels = np.load(NUMPY_PATH + 'labels.npy')
+    waldo_sub_imgs = np.load(  NUMPY_PATH + 'wally_sub_images.npy')
+    waldo_sub_labels = np.load(NUMPY_PATH + 'wally_sub_labels.npy')
     gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels)
     X, y = next(gen_mix)
     freq0 = float(np.sum(labels == 0))
@@ -93,4 +94,3 @@ if __name__ == "__main__":
     # Save model
     modelName = 'model_' + str(ep) + 'epochs.h5'
     model.save(modelName)
-

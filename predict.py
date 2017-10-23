@@ -12,9 +12,9 @@ from params import *
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 add_arg = parser.add_argument
 
-add_arg('imgs', nargs='*', default=[])
-add_arg('--model', default='model2_10200epochs.h5', type=str)
-add_arg('--output_path', default='', type=str)
+add_arg('images', nargs='*', default=[])
+add_arg('--model', default=MODEL_PATH + 'wally_5000_6_67.h5', type=str)
+add_arg('--output_path', default='output', type=str)
 add_arg('--img_size', default=(2800, 1760), type=tuple, help='resolution to load images')
 args = parser.parse_args()
 
@@ -36,8 +36,8 @@ def img_resize(img):
 
 def split_panels(img):
     h, w, _ = img.shape
-    num_vert_panels = h / 160
-    num_hor_panels = w / 160
+    num_vert_panels =   int(h / 160)
+    num_hor_panels =    int(w / 160)
     panels = []
     for i in range(num_vert_panels):
         for j in range(num_hor_panels):
@@ -47,8 +47,8 @@ def split_panels(img):
 
 def combine_panels(img, panels):
     h, w, _ = img.shape
-    num_vert_panels = h / 160
-    num_hor_panels = w / 160
+    num_vert_panels = int(h / 160)
+    num_hor_panels =  int(w / 160)
     total = []
     p = 0
     for i in range(num_vert_panels):
@@ -84,13 +84,14 @@ def reshape_pred(pred): return pred.reshape(160, 160, 2)[:, :, 1]
 
 if __name__ == "__main__":
     """
-	This script makes predictions on a list of inputs with a pre-trained model,
-	and saves them as transparency masks over the original image.
-	# Example:
-	$ python predict.py image1.jpg image2.jpg 
-	"""
-    imgs = args.imgs
+    This script makes predictions on a list of inputs with a pre-trained model,
+    and saves them as transparency masks over the original image.
+    # Example:
+    $ python predict.py image1.jpg image2.jpg
+    """
+    images = args.images
     img_sz = args.img_size
+    print(args.images)
 
     input_shape = (160, 160, 3)
 
@@ -104,9 +105,8 @@ if __name__ == "__main__":
                   sample_weight_mode='temporal')
 
     model.load_weights(args.model)
-
-    for i, img in enumerate(imgs):
-        full_img = load_image(img, img_sz)
-        full_img_r, full_pred = waldo_predict(full_img)
-        mask = prediction_mask(full_img_r, full_pred)
+    for i, image in enumerate(images):
+        full_image = load_image(image, img_sz)
+        full_image_r, full_pred = waldo_predict(full_image)
+        mask = prediction_mask(full_image_r, full_pred)
         mask.save(os.path.join(args.output_path, 'output_' + str(i) + '.png'))
