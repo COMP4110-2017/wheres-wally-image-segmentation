@@ -1,11 +1,16 @@
 mu = 0.57417726724528806
 std = 0.31263486676782137
 
-EPOCHS = 1
+# Training parameters
+EPOCHS = 2000
 STEPS_PER_EPOCH = 6
-LOAD_MODEL = "wally_5000_6_67.h5"
-SPLIT = 0
-CHARACTER = "wally"
+SPLIT = 0.67
+CHARACTER = "wanda"
+
+# Predicting model (just the filename, including .h5)
+LOAD_MODEL = ""
+
+# Paths
 IMAGE_PATH = "models/images/" + CHARACTER + "/raw_images/"
 XML_PATH = "models/images/" + CHARACTER + "/bounding_boxes/"
 TARGET_PATH = "models/images/" + CHARACTER + "/target_images/"
