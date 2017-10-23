@@ -104,9 +104,12 @@ if __name__ == "__main__":
                   sample_weight_mode='temporal')
 
     model.load_weights(args.model)
-
+    import datetime
     for i, img in enumerate(imgs):
+        a = datetime.datetime.now()
         full_img = load_image(img, img_sz)
         full_img_r, full_pred = waldo_predict(full_img)
         mask = prediction_mask(full_img_r, full_pred)
         mask.save(os.path.join(args.output_path, 'output_' + str(i) + '.png'))
+        b = datetime.datetime.now()
+        print("Found wally in: ", b-a)
