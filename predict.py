@@ -12,22 +12,22 @@ from params import *
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 add_arg = parser.add_argument
 
-add_arg('images', nargs='*', default=[])
-add_arg('--model', default=MODEL_PATH + 'wally_5000_6_67.h5', type=str)
-add_arg('--output_path', default='output', type=str)
+add_arg('imgs', nargs='*', default=[])
+add_arg('--model', default=MODEL_PATH+LOAD_MODEL, type=str)
+add_arg('--output_path', default=FULL_PREDICTIONS_PATH, type=str)
 add_arg('--img_size', default=(2800, 1760), type=tuple, help='resolution to load images')
 args = parser.parse_args()
 
 
 def img_resize(img):
     h, w, _ = img.shape
-    nvpanels = h / 160
-    nhpanels = w / 160
+    nvpanels = int(h / 224)
+    nhpanels = int(w / 224)
     new_h, new_w = h, w
-    if nvpanels * 160 != h:
-        new_h = (nvpanels + 1) * 160
-    if nhpanels * 160 != w:
-        new_w = (nhpanels + 1) * 160
+    if nvpanels * 224 != h:
+        new_h = (nvpanels + 1) * 224
+    if nhpanels * 224 != w:
+        new_w = (nhpanels + 1) * 224
     if new_h == h and new_w == w:
         return img
     else:
@@ -36,19 +36,19 @@ def img_resize(img):
 
 def split_panels(img):
     h, w, _ = img.shape
-    num_vert_panels =   int(h / 160)
-    num_hor_panels =    int(w / 160)
+    num_vert_panels =  int(h / 224)
+    num_hor_panels =   int(w / 224)
     panels = []
     for i in range(num_vert_panels):
         for j in range(num_hor_panels):
-            panels.append(img[i * 160:(i + 1) * 160, j * 160:(j + 1) * 160])
+            panels.append(img[i * 224:(i + 1) * 224, j * 224:(j + 1) * 224])
     return np.stack(panels)
 
 
 def combine_panels(img, panels):
     h, w, _ = img.shape
-    num_vert_panels = int(h / 160)
-    num_hor_panels =  int(w / 160)
+    num_vert_panels =   int(h / 224)
+    num_hor_panels =    int(w / 224)
     total = []
     p = 0
     for i in range(num_vert_panels):
@@ -64,7 +64,7 @@ def prediction_mask(img, target):
     layer1 = Image.fromarray(((img * std + mu) * 255).astype('uint8'))
     layer2 = Image.fromarray(
         np.concatenate(
-            4 * [np.expand_dims((161 * (1 - target)).astype('uint8'), axis=-1)],
+            4 * [np.expand_dims((225 * (1 - target)).astype('uint8'), axis=-1)],
             axis=-1))
     result = Image.new("RGBA", layer1.size)
     result = Image.alpha_composite(result, layer1.convert('RGBA'))
@@ -79,7 +79,7 @@ def waldo_predict(img):
     return rimg, combine_panels(rimg, pred_panels)
 
 
-def reshape_pred(pred): return pred.reshape(160, 160, 2)[:, :, 1]
+def reshape_pred(pred): return pred.reshape(224, 224, 2)[:, :, 1]
 
 
 if __name__ == "__main__":
@@ -89,10 +89,10 @@ if __name__ == "__main__":
     # Example:
     $ python predict.py image1.jpg image2.jpg
     """
-    images = args.images
+    imgs = args.imgs
     img_sz = args.img_size
 
-    input_shape = (160, 160, 3)
+    input_shape = (224, 224, 3)
 
     img_input = Input(shape=input_shape)
     x = create_tiramisu(2, img_input, nb_layers_per_block=[4, 5, 7, 10, 12, 15], p=0.2, wd=1e-4)
@@ -104,8 +104,9 @@ if __name__ == "__main__":
                   sample_weight_mode='temporal')
 
     model.load_weights(args.model)
-    for i, image in enumerate(images):
-        full_image = load_image(image, img_sz)
-        full_image_r, full_pred = waldo_predict(full_image)
-        mask = prediction_mask(full_image_r, full_pred)
+
+    for i, img in enumerate(imgs):
+        full_img = load_image(img, img_sz)
+        full_img_r, full_pred = waldo_predict(full_img)
+        mask = prediction_mask(full_img_r, full_pred)
         mask.save(os.path.join(args.output_path, 'output_' + str(i) + '.png'))

@@ -3,9 +3,9 @@ std = 0.31263486676782137
 
 EPOCHS = 1
 STEPS_PER_EPOCH = 6
-LOAD_MODEL = ""
+LOAD_MODEL = "wally_5000_6_67.h5"
 SPLIT = 0
-CHARACTER = "wanda"
+CHARACTER = "wally"
 IMAGE_PATH = "models/images/" + CHARACTER + "/raw_images/"
 XML_PATH = "models/images/" + CHARACTER + "/bounding_boxes/"
 TARGET_PATH = "models/images/" + CHARACTER + "/target_images/"
