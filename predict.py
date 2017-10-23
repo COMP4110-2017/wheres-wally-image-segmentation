@@ -4,6 +4,7 @@ import keras
 import sys
 import argparse
 import os
+import glob
 from PIL import Image
 from scipy.misc import imresize
 from preprocessing import load_image
@@ -12,10 +13,11 @@ from params import *
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 add_arg = parser.add_argument
 
-add_arg('imgs', nargs='*', default=[])
+add_arg('images', nargs='*', default=[])
 add_arg('--model', default=MODEL_PATH+LOAD_MODEL, type=str)
-add_arg('--output_path', default=FULL_PREDICTIONS_PATH, type=str)
-add_arg('--img_size', default=(2800, 1760), type=tuple, help='resolution to load images')
+add_arg('--input_path', default=INPUT_PATH, type=str)
+add_arg('--output_path', default=OUTPUT_PATH, type=str)
+add_arg('--image_size', default=(2800, 1760), type=tuple, help='resolution to load images')
 args = parser.parse_args()
 
 
@@ -81,7 +83,6 @@ def waldo_predict(img):
 
 def reshape_pred(pred): return pred.reshape(224, 224, 2)[:, :, 1]
 
-
 if __name__ == "__main__":
     """
     This script makes predictions on a list of inputs with a pre-trained model,
@@ -89,8 +90,14 @@ if __name__ == "__main__":
     # Example:
     $ python predict.py image1.jpg image2.jpg
     """
-    imgs = args.imgs
-    img_sz = args.img_size
+    images = args.images
+    image_size = args.image_size
+
+    if len(images) == 0:
+        images = glob.glob(os.path.join(args.input_path, "*"))
+
+        for i, image in enumerate(images):
+            images[i] = image[len(os.path.join(args.input_path)):]
 
     input_shape = (224, 224, 3)
 
@@ -105,8 +112,16 @@ if __name__ == "__main__":
 
     model.load_weights(args.model)
 
-    for i, img in enumerate(imgs):
-        full_img = load_image(img, img_sz)
-        full_img_r, full_pred = waldo_predict(full_img)
-        mask = prediction_mask(full_img_r, full_pred)
-        mask.save(os.path.join(args.output_path, 'output_' + str(i) + '.png'))
+    for i, image in enumerate(images):
+        full_image_path = os.path.join(args.input_path, image)
+
+        input_file_name = os.path.basename(image)
+        input_file_name_without_extension = input_file_name[:input_file_name.index('.')]
+
+        full_image = load_image(full_image_path, image_size)
+        full_image_resized, full_prediction = waldo_predict(full_image)
+
+        mask = prediction_mask(full_image_resized, full_prediction)
+        mask.save(os.path.join(args.output_path, OUTPUT_PREFIX + input_file_name_without_extension + ".png"))
+
+        print("Saved " + OUTPUT_PREFIX + input_file_name_without_extension + ".png")

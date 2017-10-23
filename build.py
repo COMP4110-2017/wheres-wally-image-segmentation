@@ -54,7 +54,7 @@ def run():
     print('Training Complete! Time: ', b - a)
 
     # Save model
-    model.save(params.SAVE_MODEL + ".h5")
+    model.save(params.SAVE_MODEL)
 
     # View Results
     h = model.history.history
