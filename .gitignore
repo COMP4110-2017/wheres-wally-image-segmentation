@@ -105,6 +105,6 @@ ENV/
 
 #images
 output/*
-output/!.gitkeep
+!output/.gitkeep
 
 .idea

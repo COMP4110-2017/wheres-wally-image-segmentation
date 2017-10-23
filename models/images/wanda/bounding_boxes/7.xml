@@ -1,7 +1,7 @@
 <annotation>
-	<folder>original-images</folder>
+	<folder>raw_images</folder>
 	<filename>7.jpg</filename>
-	<path>/Users/Bckenstler/Documents/repos/Hey-Waldo/original-images/7.jpg</path>
+	<path>D:\Users\Mitch\Documents\University\COMP4110\src\wheres-wally-image-segmentation\models\images\wanda\raw_images\7.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -12,15 +12,15 @@
 	</size>
 	<segmented>0</segmented>
 	<object>
-		<name>waldo</name>
+		<name>wanda</name>
 		<pose>Unspecified</pose>
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>817</xmin>
-			<ymin>951</ymin>
-			<xmax>852</xmax>
-			<ymax>999</ymax>
+			<xmin>1552</xmin>
+			<ymin>1056</ymin>
+			<xmax>1623</xmax>
+			<ymax>1133</ymax>
 		</bndbox>
 	</object>
 </annotation>
