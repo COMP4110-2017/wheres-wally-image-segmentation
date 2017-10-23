@@ -91,7 +91,6 @@ if __name__ == "__main__":
     """
     images = args.images
     img_sz = args.img_size
-    print(args.images)
 
     input_shape = (160, 160, 3)
 

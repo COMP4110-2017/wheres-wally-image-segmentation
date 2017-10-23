@@ -38,16 +38,16 @@ def run():
                   sample_weight_mode='temporal')
 
     # Load Model Weights
-    if (params.LOAD_MODEL != ""):
+    if (LOAD_MODEL != ""):
         model.load_weights(MODEL_PATH + LOAD_MODEL)
 
     # Training
-    if (params.SPLIT == 0):
+    if (SPLIT == 0):
         gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels)
     else:
-        gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels, tot_bs=6, prop=params.SPLIT)
+        gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels, tot_bs=6, prop=SPLIT)
     a = datetime.datetime.now()
-    model.fit_generator(gen_mix, steps_per_epoch=params.STEPS_PER_EPOCH, epochs=params.EPOCHS, verbose=0,
+    model.fit_generator(gen_mix, steps_per_epoch=STEPS_PER_EPOCH, epochs=EPOCHS, verbose=0,
                         callbacks=[TQDMCallback()],
                         class_weight=sample_weights)
     b = datetime.datetime.now()
@@ -83,14 +83,12 @@ if __name__ == "__main__":
 
     model.compile(loss='categorical_crossentropy', optimizer=keras.optimizers.RMSprop(1e-3), metrics=["accuracy"],
                   sample_weight_mode='temporal')
-    spe = 6
-    ep = 10
+
     a = datetime.datetime.now()
-    model.fit_generator(gen_mix, steps_per_epoch=spe, epochs=ep, verbose=0, callbacks=[TQDMCallback()],
+    model.fit_generator(gen_mix, steps_per_epoch=STEPS_PER_EPOCH, epochs=EPOCHS, verbose=0, callbacks=[TQDMCallback()],
                         class_weight=sample_weights)
     b = datetime.datetime.now()
     print('Training Complete! Time: ', b - a)
 
     # Save model
-    modelName = 'model_' + str(ep) + 'epochs.h5'
-    model.save(modelName)
+    model.save(SAVE_MODEL)
