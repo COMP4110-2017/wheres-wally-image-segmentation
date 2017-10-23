@@ -5,6 +5,7 @@ import sys
 import argparse
 import os
 import glob
+import datetime
 from PIL import Image
 from scipy.misc import imresize
 from preprocessing import load_image
@@ -83,6 +84,7 @@ def waldo_predict(img):
 
 def reshape_pred(pred): return pred.reshape(224, 224, 2)[:, :, 1]
 
+
 if __name__ == "__main__":
     """
     This script makes predictions on a list of inputs with a pre-trained model,
@@ -113,6 +115,8 @@ if __name__ == "__main__":
     model.load_weights(args.model)
 
     for i, image in enumerate(images):
+        time_start = datetime.datetime.now()
+
         full_image_path = os.path.join(args.input_path, image)
 
         input_file_name = os.path.basename(image)
@@ -125,3 +129,7 @@ if __name__ == "__main__":
         mask.save(os.path.join(args.output_path, OUTPUT_PREFIX + input_file_name_without_extension + ".png"))
 
         print("Saved " + OUTPUT_PREFIX + input_file_name_without_extension + ".png")
+
+        time_end = datetime.datetime.now()
+
+        print("Found target in ", time_end - time_start)

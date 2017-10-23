@@ -83,7 +83,10 @@ if __name__ == "__main__":
 
     model.compile(loss='categorical_crossentropy', optimizer=keras.optimizers.RMSprop(1e-3), metrics=["accuracy"],
                   sample_weight_mode='temporal')
+    if (LOAD_MODEL != ""):
+        model.load_weights(MODEL_PATH + LOAD_MODEL)
 
+    gen_mix = seg_gen_mix(waldo_sub_imgs, waldo_sub_labels, images, labels, tot_bs=6, prop=SPLIT)
     a = datetime.datetime.now()
     model.fit_generator(gen_mix, steps_per_epoch=STEPS_PER_EPOCH, epochs=EPOCHS, verbose=0, callbacks=[TQDMCallback()],
                         class_weight=sample_weights)
