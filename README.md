@@ -33,6 +33,6 @@ Run this command in Anaconda Terminal to build the model, using the configuratio
 
 Run this command in Anaconda Terminal to start predicting on the built model with the name as specified in the ```env.py``` file.
 
-    python run_everything.py
+    python predict.py
 
 Images with prediction masks will be stored in the ```output``` folder.
