@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFo
 add_arg = parser.add_argument
 
 add_arg('images', nargs='*', default=[])
-add_arg('--model', default=MODEL_PATH+FROM_MODEL, type=str)
+add_arg('--model', default=MODEL_PATH+FROM_MODEL + ".h5", type=str)
 add_arg('--input_path', default=INPUT_PATH, type=str)
 add_arg('--output_path', default=OUTPUT_PATH, type=str)
 add_arg('--image_size', default=(2800, 1760), type=tuple, help='resolution to load images')
