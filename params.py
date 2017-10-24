@@ -21,7 +21,7 @@ NUMPY_PATH = "models/images/" + CHARACTER + "/numpy/"
 MODEL_PATH = "models/binaries/"
 INPUT_PATH = "input/"
 OUTPUT_PATH = "output/"
-OUTPUT_PREFIX = MODEL_NAME + "_"
+OUTPUT_PREFIX = FROM_MODEL + "_"
 
 mu = 0.57417726724528806
 std = 0.31263486676782137
